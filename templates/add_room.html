@@ -5,17 +5,18 @@
     <title>Adding room</title>
 </head>
 <body>
-        <form action="" method="post">
+        <form action="" method="POST">
             {% csrf_token %}
-            <label>
+            <label>Name of room
                 <input type="text" name="name">
-            </label>
-            <label>
+            </label><br>
+            <label>Capacity
                 <input type="number" name="capacity">
-            </label>
-            <label>
+            </label><br>
+            <label>Is available
                 <input type="checkbox" name="projector">
-            </label>
+            </label><br>
+            <input type="submit" value="Send">
         </form>
 </body>
 </html>
