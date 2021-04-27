@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rezerwacja sali</title>
+</head>
+<body>
+
+    <h1>Nazwa sali:</h1>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <label>Date
+                <input type="date" name="date">
+            </label><br>
+            <label>Comment
+                <textarea name="comment"></textarea>
+            </label><br>
+
+            <input type="submit" value="Send">
+        </form>
+</body>
+</html>

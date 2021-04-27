@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Adding room</title>
+</head>
+<body>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <label>Name of room
+                <input type="text" name="name" value={{ room.name }}>
+            </label><br>
+            <label>Capacity
+                <input type="number" name="capacity" value={{ room.capacity }}>
+            </label><br>
+            <label>Is available
+                <input type="checkbox" name="projector" value={{ room.projector }}>
+            </label><br>
+            <input type="submit" value="Edytuj">
+        </form>
+</body>
+</html>

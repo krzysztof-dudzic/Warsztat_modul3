@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Widok sali</title>
+</head>
+<body>
+    <table>
+        {% for room in rooms %}
+            <tr>
+                <td>{{room.id}}</td>
+                <td>{{room.name}}</td>
+                <td>{{room.capacity}}</td>
+{#                <td>{{ room.response }}</td>#}
+                <td>{{room.projector}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+</body>
+</html>
