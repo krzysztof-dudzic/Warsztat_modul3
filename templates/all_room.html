@@ -10,7 +10,8 @@
     <thead>
     <th>id</th>
     <th>Nazwa</th>
-    <th>Ilość miejsc</th>
+    <th>Pojemność</th>
+    <th>Dostępność</th>
     <th>Dostępność rzutnika</th>
     </thead>
 <tbody>
@@ -21,6 +22,11 @@
             <a href="room/{{ room.id }}">{{ room.name }}</a>
             </td>
             <td>{{ room.capacity }}</td>
+            {% if room.reserved %}
+            <td style="color: #db4437">Zarezerwowana</td>
+                {% else %}
+            <td style="color: #0C5404">Dostępna</td>
+            {% endif %}
             {% if room.projector %}
             <td style="color:green">&#9745</td>
                 {% else %}
@@ -31,8 +37,15 @@
             <td><a href="/room/reserve/{{ room.id }}">Reserve room</a></td>
 
 {#            <th>{{ room.id }}</th>#}
-
-
+            <h3>Rezerwacje</h3>
+            <ul>
+                {% for reservation in reservations %}
+                    <li>
+                    <h4>{{ reservation.date }}</h4>
+                    <p>{{ reservation.comment }}</p>
+                    </li>
+                    {% endfor %}
+            </ul>
         </tr>
         {% empty %}
              <tr><td colspan="6">Brak dostępnych sal</td></tr>

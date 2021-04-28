@@ -5,8 +5,8 @@ from django.views import View
 from sala_app.models import *
 import datetime
 
-def index(request):
 
+def index(request):
     return render(request, 'start_page.html')
 
 
@@ -97,8 +97,8 @@ class ReserveRoom(View):
 
     def post(self, request, room_id):
         room = Room.objects.get(id=room_id)
-        date = request.POST.get('date')
-        comment = request.POST.get('comment')
+        date = request.POST.get("date")
+        comment = request.POST.get("comment")
 
         if Reserve.objects.filter(room=room, date=date):
             return HttpResponse("Sala jest zajęta")
@@ -107,3 +107,20 @@ class ReserveRoom(View):
 
         Reserve.objects.create(room=room, date=date, comment=comment)
         return redirect("all-rooms")
+
+
+class RoomDeatilsView(View):
+    def get(self, request, room_id):
+        room = Room.objects.get(id=room_id)
+        reservations = room.roomreservations_set.filter(date__gte=str(datetime.date().today())).order_bt('date')
+        return render(request, template_name="all_room.html", context={"room": room, "reservations": reservations})
+
+
+class RoomListView(View):
+    def get(self, request):
+        rooms = Room.objects.all()
+        for room in rooms:
+            reservation_dates = [reservation.date for reservation in room.roomreservations_set.all()]
+            room.reserved = datetime.date.today() in reservation_dates
+        return render(request, template_name="all_room.html", context={"rooms": rooms})
+
