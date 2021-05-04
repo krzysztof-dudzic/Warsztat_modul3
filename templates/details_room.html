@@ -2,23 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Szczegółowe dane na temat sali {{ room.id }}</title>
+    <title>Szczegółowe dane na temat sali</title>
 </head>
 <body>
-<!-- Nav -->
-<nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">System rezerwacji sal</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav">
-      <a class="nav-item nav-link" href="/">Lista wszystkich sal<span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link" href="/room/new/">Dodaj salę</a>
-    </div>
-  </div>
-</nav>
-<!-- Nav -->
+{#<!-- Nav -->#}
+{#<nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">#}
+{#  <a class="navbar-brand" href="#">System rezerwacji sal</a>#}
+{#  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">#}
+{#    <span class="navbar-toggler-icon"></span>#}
+{#  </button>#}
+{#  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">#}
+{#    <div class="navbar-nav">#}
+{#      <a class="nav-item nav-link" href="/">Lista wszystkich sal<span class="sr-only">(current)</span></a>#}
+{#      <a class="nav-item nav-link" href="/room/new/">Dodaj salę</a>#}
+{#    </div>#}
+{#  </div>#}
+{#</nav>#}
+{#<!-- Nav -->#}
 
 <!-- Room Details -->
 <div class="card">
@@ -26,7 +26,7 @@
     <h2>Nazwa sali: {{ room.name }}</h2>
     <p>Pojemność sali: {{ room.capacity }}</p>
     <p>Dostępność rzutnika:
-      {% if room.projector_availability %}
+      {% if room.projector %}
         <span style="color:green;">&#9745;</span>
       {% else %}
         <span style="color:red;">&#9746;</span>

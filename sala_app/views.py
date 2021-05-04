@@ -35,7 +35,6 @@ class AddRoom(View):
 
 class AllRooms(View):
     def get(self, request):
-
         rooms = Room.objects.all()
         if not rooms:
             return HttpResponse("No available rooms")
@@ -74,13 +73,13 @@ class ModifyRoom(View):
         room = Room.objects.get(id=room_id)
         name = request.POST.get('name')
         capacity = request.POST.get('capacity')
-        capacity = int(capacity)
+        capacity = int(capacity) if capacity else 0
         projector = request.POST.get('projector') == 'on'
         if name == '':
             return HttpResponse("Brak nazwy sali")
         elif capacity <= 0:
             return HttpResponse("Zła liczba")
-        elif name != room.name and Room.objects.filter(name=name):
+        elif name != room.name and Room.objects.filter(name=name).first():
             return HttpResponse("zła nazwa")
 
         room.name = name
@@ -93,13 +92,14 @@ class ModifyRoom(View):
 class ReserveRoom(View):
     def get(self, request, room_id):
         room = Room.objects.get(id=room_id)
-        return render(request, template_name="reserve_room.html", context={'room': room})
+        reservations = room.roomreservation_set.filter(date__gte=str(datetime.date.today())).order_by('date')
+        return render(request, template_name="reservation.html", context={'room': room, 'reservations': reservations})
 
     def post(self, request, room_id):
         room = Room.objects.get(id=room_id)
         date = request.POST.get("date")
         comment = request.POST.get("comment")
-
+        reservations = room.roomreservation_set.filter(date__gte=str(datetime.date.today())).order_by('date')
         if Reserve.objects.filter(room=room, date=date):
             return HttpResponse("Sala jest zajęta")
         if date < str(datetime.date.today()):
@@ -117,30 +117,33 @@ class RoomDeatilsView(View):
 
 
 class RoomListView(View):
-    def get(self, request, room_id):
-        room = Room.objects.get(id=room_id)
-        reservations = room.roomreservation_set.filter(date__gte=str(datetime.date().today())).order_by('date')
-        return render(request, template_name="reservation.html", context={"room": room, "reservations": reservations})
+    def get(self, request):
+        rooms = Room.objects.all()
+        for room in rooms:
+            reservation_dates = [reservation.date for reservation in room.roomreservation_set.all()]
+            room.reserved = datetime.date.today() in reservation_dates
+        # reservations = room.roomreservation_set.filter(date__gte=str(datetime.date().today())).order_by('date')
+        return render(request, template_name="all_room.html", context={"rooms": rooms})
 
-    def post(self, request, room_id):
-        room = Room.objects.get(id=room_id)
-        date = request.POST.get("date")
-        comment = request.POST.get("comment")
-
-        reservations = room.roomreservation_set.filter(date__gte=str(datetime.date().today())).order_by('date')
-
-        if Reserve.objects.filter(room=room, date=date):
-            return render(request, "reservation.html", context={"room": room,
-                                                                "reservations": reservations,
-                                                                "error": "Sala jest już zarezerwowana!"})
-
-        if date < str(datetime.date.today()):
-            return render(request, "reservation.html", context={"room": room,
-                                                                "reservations": reservations,
-                                                                "error": "Data jest z przyszłości!"})
-
-        Reserve.objects.create(room=room, date=date, comment=comment)
-        return redirect("all-rooms")
+    # def post(self, request, room_id):
+    #     room = Room.objects.get(id=room_id)
+    #     date = request.POST.get("date")
+    #     comment = request.POST.get("comment")
+    #
+    #     reservations = room.roomreservation_set.filter(date__gte=str(datetime.date().today())).order_by('date')
+    #
+    #     if Reserve.objects.filter(room=room, date=date):
+    #         return render(request, "reservation.html", context={"room": room,
+    #                                                             "reservations": reservations,
+    #                                                             "error": "Sala jest już zarezerwowana!"})
+    #
+    #     if date < str(datetime.date.today()):
+    #         return render(request, "reservation.html", context={"room": room,
+    #                                                             "reservations": reservations,
+    #                                                             "error": "Data jest z przyszłości!"})
+    #
+    #     Reserve.objects.create(room=room, date=date, comment=comment)
+    #     return redirect("all-rooms")
 
 
 class SearchView(View):

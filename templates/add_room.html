@@ -7,16 +7,21 @@
 <body>
         <form action="" method="POST">
             {% csrf_token %}
-            <label>Name of room
+            <div>
+                <label>Name of room</label>
                 <input type="text" name="name">
-            </label><br>
-            <label>Capacity
+            </div>
+            <div>
+                <label>Capacity</label>
                 <input type="number" name="capacity">
-            </label><br>
-            <label>Is available
+            </div>
+           <div>
+              <label>Is available
                 <input type="checkbox" name="projector">
-            </label><br>
-            <input type="submit" value="Send">
+            </label>
+           </div>
+
+            <button type="submit">Dodaj salę</button>
         </form>
 </body>
 </html>

@@ -5,18 +5,22 @@
     <title>Rezerwacja sali</title>
 </head>
 <body>
+<div>
+    <h2>Nazwa sali: {{ room.name }}</h2>
+    <form action="" method="post">
+        <div>
+            <label>Data rezerwacji</label>
+            <input type="date" name="reservation">
+        </div>
+        <div>
+            <label>Komentarz</label>
+            <textarea name="comment"></textarea>
+        </div>
 
-    <h1>Nazwa sali: {{ room.name }}</h1>
-        <form action="" method="POST">
-            {% csrf_token %}
-            <label>Date
-                <input type="date" name="date">
-            </label><br>
-            <label>Comment
-                <textarea name="comment"></textarea>
-            </label><br>
+        <button type="submit">Zarezerwuj</button>
+    </form>
+</div>
 
-            <input type="submit" value="Send">
-        </form>
+
 </body>
 </html>

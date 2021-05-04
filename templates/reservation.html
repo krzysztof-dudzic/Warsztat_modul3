@@ -5,6 +5,25 @@
     <title>Rezerwacje</title>
 </head>
 <body>
+<div>
+    <h2>Nazwa sali: {{ room.name }}</h2>
+    <form action="" method="post">
+        <div>
+            <label>Data rezerwacji</label>
+            <input type="date" name="reservation">
+        </div>
+        <div>
+            <label>Komentarz</label>
+            <textarea name="comment"></textarea>
+        </div>
+
+        <button type="submit">Zarezerwuj</button>
+    </form>
+</div>
+
+
+
+
 <!-- Wszystkie rezerwacje -->
 <div class="card">
   <div class="card-body">
@@ -20,6 +39,9 @@
   </div>
 </div>
 <!-- Wszystkie rezerwacje -->
+
+
+
 
 </body>
 </html>
