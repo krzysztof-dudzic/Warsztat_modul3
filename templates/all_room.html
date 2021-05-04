@@ -19,7 +19,7 @@
 <tr>
             <th>{{ room.id }}</th>
             <td>
-            <a href="room/{{ room.id }}">{{ room.name }}</a>
+            <a href="/room/{{ room.id }}">{{ room.name }}</a>
             </td>
             <td>{{ room.capacity }}</td>
             {% if room.reserved %}
@@ -36,22 +36,38 @@
             <td><a href="/room/delete/{{ room.id }}">Delete room</a></td>
             <td><a href="/room/reserve/{{ room.id }}">Reserve room</a></td>
 
+
 {#            <th>{{ room.id }}</th>#}
-            <h3>Rezerwacje</h3>
-            <ul>
-                {% for reservation in reservations %}
-                    <li>
-                    <h4>{{ reservation.date }}</h4>
-                    <p>{{ reservation.comment }}</p>
-                    </li>
-                    {% endfor %}
-            </ul>
-        </tr>
+{#            <h3>Rezerwacje</h3>#}
+{#            <ul>#}
+{#                {% for reservation in reservations %}#}
+{#                    <li>#}
+{#                    <h4>{{ reservation.date }}</h4>#}
+{#                    <p>{{ reservation.comment }}</p>#}
+{#                    </li>#}
+{#                    {% endfor %}#}
+{#            </ul>#}
+            </tr>
         {% empty %}
              <tr><td colspan="6">Brak dostępnych sal</td></tr>
         {% endfor %}
+
 </tbody>
 </table>
+
+    <h3>Wyszukiwanie</h3>
+    <form action="/search" method="get">
+        {% csrf_token %}
+        <label>Nazwa sali</label>
+        <input type="text" name="room-name">
+        <label> Minimalna pojemność sali</label>
+        <input type="number" step="1" name="capacity">
+        <input type="checkbox" name="projector">
+        <label>Dostępność rzutnika</label>
+        <button type="submit">Szukaj</button>
+
+
+
 
 </body>
 </html>

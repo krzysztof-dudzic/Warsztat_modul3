@@ -112,15 +112,61 @@ class ReserveRoom(View):
 class RoomDeatilsView(View):
     def get(self, request, room_id):
         room = Room.objects.get(id=room_id)
-        reservations = room.roomreservations_set.filter(date__gte=str(datetime.date().today())).order_bt('date')
-        return render(request, template_name="all_room.html", context={"room": room, "reservations": reservations})
+        reservations = room.roomreservations_set.filter(date__gte=str(datetime.date().today())).order_by('date')
+        return render(request, template_name="details_room.html", context={"room": room, "reservations": reservations})
 
 
 class RoomListView(View):
+    def get(self, request, room_id):
+        room = Room.objects.get(id=room_id)
+        reservations = room.roomreservation_set.filter(date__gte=str(datetime.date().today())).order_by('date')
+        return render(request, template_name="reservation.html", context={"room": room, "reservations": reservations})
+
+    def post(self, request, room_id):
+        room = Room.objects.get(id=room_id)
+        date = request.POST.get("date")
+        comment = request.POST.get("comment")
+
+        reservations = room.roomreservation_set.filter(date__gte=str(datetime.date().today())).order_by('date')
+
+        if Reserve.objects.filter(room=room, date=date):
+            return render(request, "reservation.html", context={"room": room,
+                                                                "reservations": reservations,
+                                                                "error": "Sala jest już zarezerwowana!"})
+
+        if date < str(datetime.date.today()):
+            return render(request, "reservation.html", context={"room": room,
+                                                                "reservations": reservations,
+                                                                "error": "Data jest z przyszłości!"})
+
+        Reserve.objects.create(room=room, date=date, comment=comment)
+        return redirect("all-rooms")
+
+
+class SearchView(View):
     def get(self, request):
+        name = request.GET.get("name")
+        capacity = request.GET.get("capacity")
+        capacity = int(capacity) if capacity else 0
+        projector = request.GET.get("projector") == "on"
+
         rooms = Room.objects.all()
+        if projector:
+            rooms = rooms.filter(projector=projector)
+        if capacity:
+            rooms = rooms.filter(capacity__gte=capacity)
+        if name:
+            rooms.filter(name__contains=name)
+
         for room in rooms:
-            reservation_dates = [reservation.date for reservation in room.roomreservations_set.all()]
-            room.reserved = datetime.date.today() in reservation_dates
-        return render(request, template_name="all_room.html", context={"rooms": rooms})
+            reservation_dates = [reservation.date for reservation in room.roomreservation_set.all()]
+            room.reserved = str(datetime.date.today()) in reservation_dates
+
+        return render(request, template_name="all_room.html", context={"rooms": rooms, "date": datetime.date.today()})
+
+
+
+
+
+
 
